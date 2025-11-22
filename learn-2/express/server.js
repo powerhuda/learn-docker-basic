@@ -1,17 +1,18 @@
 // server.js
 const express = require('express');
 const { getConnection } = require('./db');
+const multer = require('multer');
+const upload = multer();
 
 const app = express();
 const port = 3000;
 
-// Middleware untuk parsing body JSON
+// Middleware untuk parsing body JSON dan urlencoded
 app.use(express.json());
-
-// --- Rute API ---
+app.use(express.urlencoded({ extended: true }));
 
 // 1. POST /api/logs: Mencatat Log Baru
-app.post('/api/logs', async (req, res) => {
+app.post('/api/logs', upload.none(), async (req, res) => {
     const { level, message } = req.body;
 
     if (!level || !message) {
@@ -28,7 +29,7 @@ app.post('/api/logs', async (req, res) => {
         );
 
         res.status(201).json({ 
-            id: result.insertId, 
+            id: Number(result.insertId), 
             level, 
             message, 
             timestamp: new Date() 

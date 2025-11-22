@@ -16,7 +16,7 @@ COPY .env.docker .env
 # Inisialisasi project dan install dependency runtime
 # (Karena tidak ada package.json di folder ini, kita init minimal lalu install paket yang dibutuhkan)
 RUN npm init -y \
-    && npm install express mariadb dotenv \
+    && npm install express mariadb dotenv multer \
     && npm cache clean --force
 
 # Set environment
