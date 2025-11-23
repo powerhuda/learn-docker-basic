@@ -1,0 +1,42 @@
+version: '3.1'
+
+networks:
+  wp-net:
+
+services:
+
+  wordpress:
+    image: wordpress:php8.3-apache
+    container_name: wp-demo
+    ports:
+      - 8080:80
+    environment:
+      WORDPRESS_DB_HOST: db_mysql
+      WORDPRESS_DB_USER: root
+      WORDPRESS_DB_PASSWORD: rahasia
+      WORDPRESS_DB_NAME: wpdemo
+    volumes:
+      - wordpress:/var/www/html
+    networks:
+      - wp-net
+
+  db_mysql:
+    image: mysql:8.2.0
+    container_name: db-wp-demo
+    deploy:
+      resources:
+        limits:
+          memory: 512M
+    ports:
+      - "3307:3306"
+    volumes:
+      - ./storage/db_mysql:/var/lib/mysql
+    environment:
+      MYSQL_ROOT_PASSWORD: rahasia
+      MYSQL_DATABASE: wpdemo
+      MYSQL_PASSWORD: rahasia
+    networks:
+      - wp-net
+
+volumes:
+  wordpress:
